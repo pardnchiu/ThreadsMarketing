@@ -8,7 +8,7 @@ require (
 	github.com/rivo/tview v0.42.0 // direct
 )
 
-require github.com/pardnchiu/go-utils v0.1.1
+require github.com/pardnchiu/go-utils v0.1.2
 
 require (
 	github.com/gdamore/encoding v1.0.1 // indirect

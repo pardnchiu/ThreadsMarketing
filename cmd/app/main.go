@@ -42,6 +42,8 @@ var (
 )
 
 func main() {
+	utils_keychain.Init(serviceName, configDir)
+
 	appOnce.Do(func() {
 		app = tview.NewApplication()
 
@@ -164,7 +166,7 @@ func login(input string) {
 				{"user_id", result.UserID},
 			}
 			for _, p := range pairs {
-				if err := utils_keychain.Set(serviceName, configDir, p[0], p[1]); err != nil {
+				if err := utils_keychain.Set(p[0], p[1]); err != nil {
 					rewriteLog(fmt.Sprintf("[login] failed to save token: %v", err))
 					return
 				}
@@ -181,7 +183,7 @@ func login(input string) {
 }
 
 func verifyLogin() {
-	token := utils_keychain.Get(serviceName, configDir, "access_token")
+	token := utils_keychain.Get("access_token")
 	if token == "" {
 		writeLog("[auth] please login first")
 		return
@@ -191,7 +193,7 @@ func verifyLogin() {
 
 	userID, username, err := threads.Verify(context.Background(), token)
 	if err != nil {
-		utils_keychain.Delete(serviceName, configDir, "access_token")
+		utils_keychain.Delete("access_token")
 		rewriteLog(fmt.Sprintf("[auth] failed to verify: %v", err))
 		writeLog("[auth] please login again")
 		return

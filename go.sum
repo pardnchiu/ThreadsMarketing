@@ -10,6 +10,8 @@ github.com/pardnchiu/go-utils v0.1.0 h1:u6wiDpAmeE0/o6pibrX6Ohs1l0rDGO6EgPAHhadc
 github.com/pardnchiu/go-utils v0.1.0/go.mod h1:DgZYzLSZeIovw0cgahNdV4kDJq4pAMEdNXk6Uzc65JU=
 github.com/pardnchiu/go-utils v0.1.1 h1:56Tk74m8x3njWIMAejBczRM/RXaX6NuQvLOmY9IAqFI=
 github.com/pardnchiu/go-utils v0.1.1/go.mod h1:DgZYzLSZeIovw0cgahNdV4kDJq4pAMEdNXk6Uzc65JU=
+github.com/pardnchiu/go-utils v0.1.2 h1:skuyEbiq/roK7VHg7ceL+6gHhOwdJQF5YRpVizj0lhk=
+github.com/pardnchiu/go-utils v0.1.2/go.mod h1:DgZYzLSZeIovw0cgahNdV4kDJq4pAMEdNXk6Uzc65JU=
 github.com/rivo/tview v0.42.0 h1:b/ftp+RxtDsHSaynXTbJb+/n/BxDEi+W3UfF5jILK6c=
 github.com/rivo/tview v0.42.0/go.mod h1:cSfIYfhpSGCjp3r/ECJb+GKS7cGJnqV8vfjQPwoXyfY=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
