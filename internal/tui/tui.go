@@ -7,6 +7,7 @@ import (
 
 	"github.com/common-nighthawk/go-figure"
 	"github.com/gdamore/tcell/v2"
+	"github.com/pardnchiu/ThreadsMarketing/internal/scheduler"
 	"github.com/pardnchiu/ThreadsMarketing/internal/threads"
 	"github.com/rivo/tview"
 )
@@ -54,10 +55,27 @@ func New() *tview.Application {
 		inputView.SetBorder(true).
 			SetBorderColor(tcell.ColorWhite)
 
+		app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+			if event.Key() == tcell.KeyTab {
+				if app.GetFocus() == inputView {
+					app.SetFocus(dashboardView)
+				} else {
+					app.SetFocus(inputView)
+				}
+				return nil
+			}
+			return event
+		})
+
 		app.SetAfterDrawFunc(func(screen tcell.Screen) {
 			app.SetAfterDrawFunc(nil)
 			setDefault()
 			go verifyLogin()
+			go func() {
+				if err := scheduler.Start(writeLog, rewriteLog); err != nil {
+					writeLog("[scheduler] " + err.Error())
+				}
+			}()
 		})
 	})
 

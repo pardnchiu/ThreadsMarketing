@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/joho/godotenv"
 	"github.com/pardnchiu/ThreadsMarketing/internal/tui"
 	utils_keychain "github.com/pardnchiu/go-utils/filesystem/keychain"
 )
@@ -17,6 +18,8 @@ var (
 )
 
 func main() {
+	_ = godotenv.Load()
+
 	utils_keychain.Init(serviceName, configDir)
 
 	app := tui.New()
