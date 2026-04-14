@@ -2,9 +2,9 @@ package scheduler
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"math/rand/v2"
-	"os"
 	"sync/atomic"
 	"time"
 
@@ -20,14 +20,8 @@ const (
 
 type Logger func(msg string)
 
-func Start(writeLog, rewriteLog Logger) error {
-	apiKey := os.Getenv("ANTHROPIC_API_KEY")
-	if apiKey == "" {
-		writeLog("[scheduler] ANTHROPIC_API_KEY is required")
-		return nil
-	}
-
-	gen := llm.New(apiKey, "")
+func Start(db *sql.DB, writeLog, rewriteLog Logger) error {
+	gen := llm.New()
 
 	location, _ := time.LoadLocation("Asia/Taipei")
 	cron, err := scheduler.New(scheduler.Config{Location: location})
@@ -47,11 +41,12 @@ func Start(writeLog, rewriteLog Logger) error {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		defer cancel()
 
-		text, err := gen.Generate(ctx)
+		style := llm.PickStyle(rand.IntN)
+		text, err := gen.Generate(ctx, style, "")
 		if err != nil {
 			rewriteLog(fmt.Sprintf("[gen] failed: %v", err))
 		} else {
-			rewriteLog("[gen] ─── post ───\n" + text + "\n[gen] ─── end ───")
+			rewriteLog(fmt.Sprintf("[gen] ─── post (%s) ───\n%s\n[gen] ─── end ───", style, text))
 		}
 
 		delta := minInterval + time.Duration(rand.Int64N(int64(maxInterval-minInterval)))
@@ -63,6 +58,7 @@ func Start(writeLog, rewriteLog Logger) error {
 		return fmt.Errorf("scheduler add: %w", err)
 	}
 
+	_ = db
 	cron.Start()
 	return nil
 }

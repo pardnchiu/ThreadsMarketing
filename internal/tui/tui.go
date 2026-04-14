@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"database/sql"
+
 	"github.com/common-nighthawk/go-figure"
 	"github.com/gdamore/tcell/v2"
 	"github.com/pardnchiu/ThreadsMarketing/internal/scheduler"
@@ -36,7 +38,7 @@ var (
 	authAppSecret string
 )
 
-func New() *tview.Application {
+func New(db *sql.DB) *tview.Application {
 	appOnce.Do(func() {
 		app = tview.NewApplication()
 
@@ -72,7 +74,7 @@ func New() *tview.Application {
 			setDefault()
 			go verifyLogin()
 			go func() {
-				if err := scheduler.Start(writeLog, rewriteLog); err != nil {
+				if err := scheduler.Start(db, writeLog, rewriteLog); err != nil {
 					writeLog("[scheduler] " + err.Error())
 				}
 			}()
